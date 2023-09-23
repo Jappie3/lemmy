@@ -21,7 +21,8 @@
     };
   in {
     #nix.allowed-uris = "https://github.com/LemmyNet/lemmy-translations";
-    packages.x86_64-linux.default = pkgs.rustPlatform.buildRustPackage {
+    packages.x86_64-linux.buildlemmy = pkgs.rustPlatform.buildRustPackage {
+      # TODO
       # format with cargo: +nightly fmt --all
       # run linter: ./scripts/fix-clippy.sh
       name = "lemmy";
@@ -32,27 +33,56 @@
         lockFile = ./Cargo.lock;
       };
       doCheck = true;
+      copyLibs = true;
+
+      # set env vars
       CARGO_BUILD_INCREMENTAL = "false";
       RUST_BACKTRACE = "full";
-      copyLibs = true;
+
       nativeBuildInputs = with pkgs; [
+        # build deps
         pkg-config
         rustfmt
         rustc
         cargo
+
+        # SBOM
+        cargo-cyclonedx
+        # SCA (audit cargo.lock)
+        cargo-audit
+        # security scanner
+        trivy
+        # lints
+        clippy
       ];
       buildInputs = with pkgs; [
         openssl.dev
         postgresql.lib
       ];
+
       preConfigure = ''
+        # make sure the git submodule is in place
         mkdir -p crates/utils/translations
         cp -r ${translations-submodule}/* crates/utils/translations
+
+        cargo audit
+        # cargo audit fix
+
+        # TODO look into workspace-inheritance feature
+        #cargo cyclonedx
+
+        trivy config .
+        trivy filesystem .
+      '';
+
+      postConfigure = ''
+        cargo clippy
+        # cargo clippy --fix
       '';
     };
 
     hydraJobs."main" = {
-      job = self.packages.x86_64-linux.default;
+      job = self.packages.x86_64-linux.buildlemmy;
     };
   };
 }
