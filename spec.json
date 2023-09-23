@@ -1,0 +1,14 @@
+{
+    "main": {
+        "enabled": 1,
+        "hidden": false,
+        "checkinterval": 300,
+        "schedulingshares": 1000,
+        "flake": "github:jappie3/lemmy/main",
+        "enableemail": false,
+        "emailoverride": "",
+        "enable_dynamic_run_command": false,
+        "keepnr": 3,
+        "type": 1
+    }
+}

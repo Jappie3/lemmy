@@ -33,3 +33,6 @@ dev_pgdata/
 
 # database dumps
 *.sqldump
+
+# Nix
+result
