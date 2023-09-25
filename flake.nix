@@ -73,7 +73,7 @@
         cp -r ${translations-submodule}/* crates/utils/translations
 
         cargo cyclonedx
-        cargo audit fix -n -d ${advisory-db}
+        cargo audit fix
         trivy --cache-dir .trivycache config .
       '';
 
