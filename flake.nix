@@ -43,7 +43,6 @@
       doCheck = true;
       copyLibs = true;
 
-      # set env vars
       CARGO_BUILD_INCREMENTAL = "false";
       RUST_BACKTRACE = "full";
 
@@ -73,14 +72,14 @@
         cp -r ${translations-submodule}/* crates/utils/translations
 
         cargo cyclonedx
+
         cargo audit -n -d ${advisory-db} fix
+
         trivy --cache-dir .trivycache config .
       '';
 
       postConfigure = ''
-        cargo clippy
-        # cargo clippy --fix
-        # cargo clippy -D warnings -> fails on warnings
+        cargo clippy --fix
       '';
     };
 
@@ -94,7 +93,6 @@
       doCheck = true;
       copyLibs = true;
 
-      # set env vars
       CARGO_BUILD_INCREMENTAL = "false";
       RUST_BACKTRACE = "full";
 
@@ -124,15 +122,15 @@
         cp -r ${translations-submodule}/* crates/utils/translations
 
         cargo cyclonedx
-        #cargo audit -n -d ${advisory-db}
-        # cargo audit fix
-        trivy --cache-dir .trivycache config .
+
+        # fail on warnings:
+        cargo audit -n -d ${advisory-db} --deny warnings
+        trivy --cache-dir .trivycache config --exit-code 1 .
       '';
 
       postConfigure = ''
-        cargo clippy
-        # cargo clippy --fix
-        # cargo clippy -D warnings -> fails on warnings
+        # fails on warnings
+        cargo clippy -D warnings
       '';
     };
 
@@ -146,7 +144,6 @@
       doCheck = true;
       copyLibs = true;
 
-      # set env vars
       CARGO_BUILD_INCREMENTAL = "false";
       RUST_BACKTRACE = "full";
 
@@ -176,15 +173,11 @@
         cp -r ${translations-submodule}/* crates/utils/translations
 
         cargo cyclonedx
-        #cargo audit -n -d ${advisory-db}
-        # cargo audit fix
-        trivy --cache-dir .trivycache config .
+        trivy --cache-dir .trivycache config --exit-code 0 .
       '';
 
       postConfigure = ''
-        cargo clippy
-        # cargo clippy --fix
-        # cargo clippy -D warnings -> fails on warnings
+        cargo clippy -A clippy::all
       '';
     };
 
