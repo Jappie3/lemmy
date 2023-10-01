@@ -77,7 +77,8 @@
 
       preBuild = ''
         cargo cyclonedx
-        cargo audit -n -d ${advisory-db} fix
+        # needs internet V
+        #cargo audit -n -d ${advisory-db} fix
         trivy --cache-dir .trivycache config .
       '';
 
