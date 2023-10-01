@@ -70,15 +70,18 @@
         # make sure the git submodule is in place
         mkdir -p crates/utils/translations
         cp -r ${translations-submodule}/* crates/utils/translations
+      '';
 
+      # postConfigure = ''
+      # '';
+
+      preBuild = ''
         cargo cyclonedx
-
         cargo audit -n -d ${advisory-db} fix
-
         trivy --cache-dir .trivycache config .
       '';
 
-      postConfigure = ''
+      postBuild = ''
         cargo clippy --fix
       '';
     };
@@ -120,17 +123,21 @@
         # make sure the git submodule is in place
         mkdir -p crates/utils/translations
         cp -r ${translations-submodule}/* crates/utils/translations
+      '';
 
+      # postConfigure = ''
+      # '';
+
+      preBuild = ''
         cargo cyclonedx
-
         # fail on warnings:
         cargo audit -n -d ${advisory-db} --deny warnings
         trivy --cache-dir .trivycache config --exit-code 1 .
       '';
 
-      postConfigure = ''
-        # fails on warnings
-        cargo clippy -D warnings
+      postBuild = ''
+        # fail on warnings
+        cargo clippy -- -D warnings
       '';
     };
 
@@ -171,13 +178,17 @@
         # make sure the git submodule is in place
         mkdir -p crates/utils/translations
         cp -r ${translations-submodule}/* crates/utils/translations
+      '';
 
+      # postConfigure = ''
+      # '';
+
+      preBuild = ''
         cargo cyclonedx
         trivy --cache-dir .trivycache config --exit-code 0 .
       '';
-
-      postConfigure = ''
-        cargo clippy -A clippy::all
+      postBuild = ''
+        cargo clippy -- -A clippy::all
       '';
     };
 
