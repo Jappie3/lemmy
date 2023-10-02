@@ -211,7 +211,8 @@
         #   ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
         # '';
 
-        "ignore" = self.packages.x86_64-linux.shorttest;
+        "ignore" = self.packages.x86_64-linux.lemmy-ignore;
+        # "ignore" = self.packages.x86_64-linux.shorttest;
       };
     };
   };
