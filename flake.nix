@@ -193,6 +193,14 @@
       };
       "ignore" = {
         job = self.packages.x86_64-linux.lemmy-ignore;
+        runCommandHook = {
+          recurseForDerivations = true;
+          example = pkgs.writeScript "run-me" ''
+            #!${pkgs.runtimeShell}
+
+            ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
+          '';
+        };
       };
 
       runCommandHook = {
