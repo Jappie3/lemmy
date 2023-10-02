@@ -170,9 +170,9 @@
       ];
 
       preConfigure = ''
-        # make sure the git submodule is in place
-        mkdir -p crates/utils/translations
-        cp -r ${translations-submodule}/* crates/utils/translations
+            # make sure the git submodule is in place
+            mkdir -p crates/utils/translations
+        hydra    cp -r ${translations-submodule}/* crates/utils/translations
       '';
 
       preBuild = ''
@@ -194,17 +194,16 @@
       "ignore" = {
         job = self.packages.x86_64-linux.lemmy-ignore;
       };
-    };
-    runCommandHook = {
-      recurseForDerivations = true;
-      example = pkgs.writeScript "run-me" ''
-        #!${pkgs.runtimeShell}
-        ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
-      '';
-      ignore = pkgs.writeScript "run-me" ''
-        #!${pkgs.runtimeShell}
-        echo 'hi'
-      '';
+
+      runCommandHook = {
+        recurseForDerivations = true;
+
+        example = pkgs.writeScript "run-me" ''
+          #!${pkgs.runtimeShell}
+
+          ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
+        '';
+      };
     };
   };
 }
