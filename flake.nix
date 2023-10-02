@@ -199,9 +199,7 @@
       "fail" = {
         job = self.packages.x86_64-linux.lemmy-fail;
       };
-      "ignore" = {
-        job = self.packages.x86_64-linux.lemmy-ignore;
-      };
+      "ignore" = self.packages.x86_64-linux.lemmy-ignore;
 
       runCommandHook = {
         # boolean not supported???
