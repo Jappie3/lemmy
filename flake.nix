@@ -184,6 +184,14 @@
       '';
     };
 
+    packages.x86_64-linux.shorttest = pkgs.writeScript "testscript" ''
+      #!${pkgs.runtimeShell}
+      sleep 10
+      echo 'hi'
+
+      ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
+    '';
+
     hydraJobs = {
       "fix" = {
         job = self.packages.x86_64-linux.lemmy-fix;
@@ -193,24 +201,18 @@
       };
       "ignore" = {
         job = self.packages.x86_64-linux.lemmy-ignore;
-        runCommandHook = {
-          recurseForDerivations = true;
-          example = pkgs.writeScript "run-me" ''
-            #!${pkgs.runtimeShell}
-
-            ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
-          '';
-        };
       };
 
       runCommandHook = {
         recurseForDerivations = true;
 
-        example = pkgs.writeScript "run-me" ''
-          #!${pkgs.runtimeShell}
+        # deploy = pkgs.writeScript "deploy-script" ''
+        #   #!${pkgs.runtimeShell}
 
-          ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
-        '';
+        #   ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
+        # '';
+
+        testhook = self.packages.x86_64-linux.shorttest;
       };
     };
   };
