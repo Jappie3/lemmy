@@ -170,9 +170,9 @@
       ];
 
       preConfigure = ''
-            # make sure the git submodule is in place
-            mkdir -p crates/utils/translations
-        hydra    cp -r ${translations-submodule}/* crates/utils/translations
+        # make sure the git submodule is in place
+        mkdir -p crates/utils/translations
+        cp -r ${translations-submodule}/* crates/utils/translations
       '';
 
       preBuild = ''
