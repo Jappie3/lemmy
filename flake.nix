@@ -204,7 +204,8 @@
       };
 
       runCommandHook = {
-        recurseForDerivations = true;
+        # boolean not supported???
+        # recurseForDerivations = true;
 
         # deploy = pkgs.writeScript "deploy-script" ''
         #   #!${pkgs.runtimeShell}
@@ -212,7 +213,7 @@
         #   ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
         # '';
 
-        testhook = self.packages.x86_64-linux.shorttest;
+        "ignore" = self.packages.x86_64-linux.shorttest;
       };
     };
   };
