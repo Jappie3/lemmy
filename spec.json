@@ -7,7 +7,7 @@
         "flake": "github:jappie3/lemmy/main",
         "enableemail": false,
         "emailoverride": "",
-        "enable_dynamic_run_command": false,
+        "enable_dynamic_run_command": true,
         "keepnr": 3,
         "type": 1
     }

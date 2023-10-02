@@ -72,9 +72,6 @@
         cp -r ${translations-submodule}/* crates/utils/translations
       '';
 
-      # postConfigure = ''
-      # '';
-
       preBuild = ''
         cargo cyclonedx
         # needs internet V
@@ -83,7 +80,7 @@
       '';
 
       postBuild = ''
-        cargo clippy --fix
+        cargo clippy --fix --allow-no-vcs
       '';
     };
 
@@ -125,9 +122,6 @@
         mkdir -p crates/utils/translations
         cp -r ${translations-submodule}/* crates/utils/translations
       '';
-
-      # postConfigure = ''
-      # '';
 
       preBuild = ''
         cargo cyclonedx
@@ -181,9 +175,6 @@
         cp -r ${translations-submodule}/* crates/utils/translations
       '';
 
-      # postConfigure = ''
-      # '';
-
       preBuild = ''
         cargo cyclonedx
         trivy --cache-dir .trivycache config --exit-code 0 .
@@ -203,6 +194,17 @@
       "ignore" = {
         job = self.packages.x86_64-linux.lemmy-ignore;
       };
+    };
+    runCommandHook = {
+      recurseForDerivations = true;
+      example = pkgs.writeScript "run-me" ''
+        #!${pkgs.runtimeShell}
+        ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
+      '';
+      ignore = pkgs.writeScript "run-me" ''
+        #!${pkgs.runtimeShell}
+        echo 'hi'
+      '';
     };
   };
 }
