@@ -181,25 +181,26 @@
       '';
       postBuild = ''
         cargo clippy -- -A clippy::all
+
+        mkdir "$out"
+        touch "$out/deploy-script"
+        # TODO script
+        echo "echo 'hi'" > "$out/deploy-script"
       '';
     };
 
-    packages.x86_64-linux.shorttest = pkgs.writeScript "testscript" ''
-      #!${pkgs.runtimeShell}
-      sleep 10
-      echo 'hi'
+    # packages.x86_64-linux.shorttest = pkgs.writeScript "testscript" ''
+    #   #!${pkgs.runtimeShell}
+    #   sleep 10
+    #   echo 'hi'
 
-      ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
-    '';
+    #   ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
+    # '';
 
     hydraJobs = {
-      "fix" = {
-        job = self.packages.x86_64-linux.lemmy-fix;
-      };
-      "fail" = {
-        job = self.packages.x86_64-linux.lemmy-fail;
-      };
-      "ignore" = self.packages.x86_64-linux.lemmy-ignore;
+      fix = self.packages.x86_64-linux.lemmy-fix;
+      fail = self.packages.x86_64-linux.lemmy-fail;
+      # ignore = self.packages.x86_64-linux.lemmy-ignore;
 
       runCommandHook = {
         # boolean not supported???
