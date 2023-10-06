@@ -182,20 +182,18 @@
       postBuild = ''
         cargo clippy -- -A clippy::all
 
-        mkdir "$out"
-        touch "$out/deploy-script"
-        # TODO script
-        echo "echo 'hi'" > "$out/deploy-script"
+        touch "$out"
+        echo "echo 'hi'" > "$out"
       '';
     };
 
-    # packages.x86_64-linux.shorttest = pkgs.writeScript "testscript" ''
-    #   #!${pkgs.runtimeShell}
-    #   sleep 10
-    #   echo 'hi'
+    packages.x86_64-linux.shorttest = pkgs.writeScript "testscript" ''
+      #!${pkgs.runtimeShell}
+      sleep 10
+      echo 'hi'
 
-    #   ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
-    # '';
+      ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
+    '';
 
     hydraJobs = {
       fix = self.packages.x86_64-linux.lemmy-fix;
@@ -211,6 +209,8 @@
 
         #   ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
         # '';
+
+        testhook = self.packages.x86_64-linux.shorttest;
 
         "ignore" = self.packages.x86_64-linux.lemmy-ignore;
         # "ignore" = self.packages.x86_64-linux.shorttest;
