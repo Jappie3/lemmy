@@ -29,10 +29,6 @@
       '';
     };
   in {
-    # TODO
-    # format with cargo: +nightly fmt --all
-    # run linter: ./scripts/fix-clippy.sh
-
     packages.x86_64-linux.lemmy-fix = pkgs.rustPlatform.buildRustPackage {
       name = "lemmy";
       pname = "lemmy";
@@ -163,6 +159,9 @@
         trivy
         # lints
         clippy
+        # for runcommand
+        jq
+        cachix
       ];
       buildInputs = with pkgs; [
         openssl.dev
