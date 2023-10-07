@@ -181,40 +181,13 @@
       '';
       postBuild = ''
         cargo clippy -- -A clippy::all
-
-        touch "$out"
-        echo "echo 'hi'" > "$out"
       '';
     };
-
-    packages.x86_64-linux.shorttest = pkgs.writeScript "testscript" ''
-      #!${pkgs.runtimeShell}
-      sleep 10
-      echo 'hi'
-
-      ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
-    '';
 
     hydraJobs = {
       fix = self.packages.x86_64-linux.lemmy-fix;
       fail = self.packages.x86_64-linux.lemmy-fail;
-      # ignore = self.packages.x86_64-linux.lemmy-ignore;
-
-      runCommandHook = {
-        # boolean not supported???
-        # recurseForDerivations = true;
-
-        # deploy = pkgs.writeScript "deploy-script" ''
-        #   #!${pkgs.runtimeShell}
-
-        #   ${pkgs.jq}/bin/jq . "$HYDRA_JSON"
-        # '';
-
-        testhook = self.packages.x86_64-linux.shorttest;
-
-        "ignore" = self.packages.x86_64-linux.lemmy-ignore;
-        # "ignore" = self.packages.x86_64-linux.shorttest;
-      };
+      ignore = self.packages.x86_64-linux.lemmy-ignore;
     };
   };
 }
