@@ -108,7 +108,7 @@
     packages.x86_64-linux.lemmy-fail = pkgs.rustPlatform.buildRustPackage {
       name = "lemmy";
       pname = "lemmy";
-      src = ./lemmy.;
+      src = ./lemmy;
       cargoLock = {
         lockFile = ./lemmy/Cargo.lock;
       };
@@ -159,7 +159,7 @@
     packages.x86_64-linux.lemmy-ignore = pkgs.rustPlatform.buildRustPackage {
       name = "lemmy";
       pname = "lemmy";
-      src = ./lemmy.;
+      src = ./lemmy;
       cargoLock = {
         lockFile = ./lemmy/Cargo.lock;
       };
