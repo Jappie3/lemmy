@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "advisory-db": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1696341198,
+        "narHash": "sha256-AgAcrT3+22QZiHxapKIt8drtP3hacNmyxFneD/Jsp8I=",
+        "owner": "rustsec",
+        "repo": "advisory-db",
+        "rev": "da470caa84d3dd3be02657a9cb35bd5269636127",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rustsec",
+        "repo": "advisory-db",
+        "type": "github"
+      }
+    },
     "agenix": {
       "inputs": {
         "darwin": "darwin",
@@ -306,6 +322,7 @@
     },
     "root": {
       "inputs": {
+        "advisory-db": "advisory-db",
         "agenix": "agenix",
         "cachix-deploy-flake": "cachix-deploy-flake",
         "disko": "disko_2",
