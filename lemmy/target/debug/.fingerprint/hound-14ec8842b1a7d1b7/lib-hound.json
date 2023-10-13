@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[]","target":4574144046118436962,"profile":623027953521984851,"path":1811073980886855242,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/hound-14ec8842b1a7d1b7/dep-lib-hound"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":15014360547818949078,"config":2202906307356721367,"compile_kind":0}

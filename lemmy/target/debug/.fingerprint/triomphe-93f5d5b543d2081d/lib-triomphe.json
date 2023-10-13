@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[]","target":13385229815066779160,"profile":623027953521984851,"path":1293450854716300368,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/triomphe-93f5d5b543d2081d/dep-lib-triomphe"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":1079805264300369296,"config":2202906307356721367,"compile_kind":0}

@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[\"std\"]","target":1009644266440026082,"profile":623027953521984851,"path":8234826047545526732,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/minimal-lexical-f49bded7f884eb50/dep-lib-minimal-lexical"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":2051824130325965549,"config":2202906307356721367,"compile_kind":0}

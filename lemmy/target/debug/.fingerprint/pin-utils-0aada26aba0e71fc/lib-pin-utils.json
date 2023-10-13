@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[]","target":5471337654911496821,"profile":13178609178403335023,"path":2527314713256654006,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/pin-utils-0aada26aba0e71fc/dep-lib-pin-utils"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":18435830730786440178,"config":2202906307356721367,"compile_kind":0}

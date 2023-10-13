@@ -1,13 +1,27 @@
 {
-  description = "Rust Hello World program for testing Hydra";
+  # nixos-anywhere root@116.203.208.183 --flake .#lemmy-deploy
+  # nixos-rebuild switch --target-host 'root@116.203.208.183' --flake .#lemmy-deploy [--use-remote-sudo --show-trace]
+  description = "Host on which Lemmy will be deployed from Cachix";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
-
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    cachix-deploy-flake.url = "github:cachix/cachix-deploy-flake";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     advisory-db = {
       url = "github:rustsec/advisory-db";
       flake = false;
     };
+
+    # lemmy = {
+    #   url = "path:/path/to/your/local/package";
+    # };
   };
 
   outputs = {
@@ -16,6 +30,7 @@
     advisory-db,
     ...
   }: let
+    inherit (self) inputs;
     pkgs = nixpkgs.legacyPackages.x86_64-linux;
     translations-submodule = pkgs.stdenv.mkDerivation {
       name = "translations";
@@ -29,12 +44,23 @@
       '';
     };
   in {
+    # HOST CONFIG
+    nixosConfigurations.lemmy-deploy = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./configuration.nix
+        inputs.disko.nixosModules.disko
+        inputs.agenix.nixosModules.default
+      ];
+    };
+
+    # LEMMY PACKAGE
     packages.x86_64-linux.lemmy-fix = pkgs.rustPlatform.buildRustPackage {
       name = "lemmy";
       pname = "lemmy";
-      src = ./.;
+      src = ./lemmy;
       cargoLock = {
-        lockFile = ./Cargo.lock;
+        lockFile = ./lemmy/Cargo.lock;
       };
       doCheck = true;
       copyLibs = true;
@@ -79,13 +105,12 @@
         cargo clippy --fix --allow-no-vcs
       '';
     };
-
     packages.x86_64-linux.lemmy-fail = pkgs.rustPlatform.buildRustPackage {
       name = "lemmy";
       pname = "lemmy";
-      src = ./.;
+      src = ./lemmy.;
       cargoLock = {
-        lockFile = ./Cargo.lock;
+        lockFile = ./lemmy/Cargo.lock;
       };
       doCheck = true;
       copyLibs = true;
@@ -131,13 +156,12 @@
         cargo clippy -- -D warnings
       '';
     };
-
     packages.x86_64-linux.lemmy-ignore = pkgs.rustPlatform.buildRustPackage {
       name = "lemmy";
       pname = "lemmy";
-      src = ./.;
+      src = ./lemmy.;
       cargoLock = {
-        lockFile = ./Cargo.lock;
+        lockFile = ./lemmy/Cargo.lock;
       };
       doCheck = true;
       copyLibs = true;
@@ -183,10 +207,12 @@
       '';
     };
 
+    # HYDRA JOBS
     hydraJobs = {
       fix = self.packages.x86_64-linux.lemmy-fix;
       fail = self.packages.x86_64-linux.lemmy-fail;
       ignore = self.packages.x86_64-linux.lemmy-ignore;
+      deploy = self.nixosConfigurations.lemmy-deploy;
     };
   };
 }

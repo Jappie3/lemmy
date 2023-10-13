@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[]","target":4568273168033506088,"profile":13178609178403335023,"path":2639568386578135736,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/adler-43684724a1cc85be/dep-lib-adler"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":10673633425720882208,"config":2202906307356721367,"compile_kind":0}

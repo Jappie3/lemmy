@@ -1,0 +1,11 @@
+/home/jasper/Dev/lemmy/target/debug/deps/futures_core-88493503c49ed230.rmeta: /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/lib.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/future.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/stream.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/mod.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/poll.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/__internal/mod.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/__internal/atomic_waker.rs
+
+/home/jasper/Dev/lemmy/target/debug/deps/futures_core-88493503c49ed230.d: /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/lib.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/future.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/stream.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/mod.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/poll.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/__internal/mod.rs /home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/__internal/atomic_waker.rs
+
+/home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/lib.rs:
+/home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/future.rs:
+/home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/stream.rs:
+/home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/mod.rs:
+/home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/poll.rs:
+/home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/__internal/mod.rs:
+/home/jasper/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.28/src/task/__internal/atomic_waker.rs:

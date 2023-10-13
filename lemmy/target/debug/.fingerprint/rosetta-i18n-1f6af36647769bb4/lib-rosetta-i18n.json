@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[]","target":13614552957764883099,"profile":623027953521984851,"path":14177368003560149654,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/rosetta-i18n-1f6af36647769bb4/dep-lib-rosetta-i18n"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":6884906540205078198,"config":2202906307356721367,"compile_kind":0}

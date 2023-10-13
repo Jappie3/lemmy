@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[\"default\", \"std\"]","target":13373619897843636023,"profile":623027953521984851,"path":15398802080645969588,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/safemem-ff4b061113a78138/dep-lib-safemem"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":5961032267634545031,"config":2202906307356721367,"compile_kind":0}

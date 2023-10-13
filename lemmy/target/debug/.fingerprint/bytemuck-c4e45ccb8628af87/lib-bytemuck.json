@@ -1,0 +1,1 @@
+{"rustc":17118256870214054982,"features":"[\"extern_crate_alloc\"]","target":15295123418435159834,"profile":2216833096552118336,"path":8481849228018880803,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/bytemuck-c4e45ccb8628af87/dep-lib-bytemuck"}}],"rustflags":[],"metadata":5417891915809776353,"config":2202906307356721367,"compile_kind":0}

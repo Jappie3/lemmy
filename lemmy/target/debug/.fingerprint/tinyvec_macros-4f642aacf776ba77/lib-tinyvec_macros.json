@@ -1,0 +1,1 @@
+{"rustc":17118256870214054982,"features":"[]","target":15502053270995021128,"profile":13178609178403335023,"path":6839481147757836040,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/tinyvec_macros-4f642aacf776ba77/dep-lib-tinyvec_macros"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":6176161823384709033,"config":2202906307356721367,"compile_kind":0}

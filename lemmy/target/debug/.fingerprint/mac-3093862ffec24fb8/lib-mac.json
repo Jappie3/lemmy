@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[]","target":5119556150507905230,"profile":623027953521984851,"path":15697352717532002750,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/mac-3093862ffec24fb8/dep-lib-mac"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":5601170736077883447,"config":2202906307356721367,"compile_kind":0}

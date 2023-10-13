@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[]","target":13010679568656334691,"profile":9347176690363218083,"path":16828934954603483658,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/tracing-core-eab02a234a7a0146/dep-lib-tracing-core"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":15100905884533717095,"config":2202906307356721367,"compile_kind":0}

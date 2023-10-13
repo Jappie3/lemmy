@@ -1,0 +1,1 @@
+{"rustc":8042998344545484739,"features":"[]","target":6261915670221056969,"profile":623027953521984851,"path":2755740126511594273,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/local-waker-ce9761de216c9c08/dep-lib-local-waker"}}],"rustflags":["--cfg","tokio_unstable"],"metadata":16227952171242140710,"config":2202906307356721367,"compile_kind":0}

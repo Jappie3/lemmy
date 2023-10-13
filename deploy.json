@@ -1,0 +1,8 @@
+{
+    "agents": {
+        "<agent-name>": "<top-level-store-path>"
+    },
+    "rollbackScript": {
+        "<system>": "<store-path-to-a-rollback-script>"
+    }
+}
