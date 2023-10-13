@@ -209,10 +209,10 @@
 
     # HYDRA JOBS
     hydraJobs = {
-      fix = self.packages.x86_64-linux.lemmy-fix;
-      fail = self.packages.x86_64-linux.lemmy-fail;
-      ignore = self.packages.x86_64-linux.lemmy-ignore;
-      # deploy = self.nixosConfigurations.lemmy-deploy;
+      # fix = self.packages.x86_64-linux.lemmy-fix;
+      # fail = self.packages.x86_64-linux.lemmy-fail;
+      # ignore = self.packages.x86_64-linux.lemmy-ignore;
+      deploy = self.nixosConfigurations.lemmy-deploy;
     };
   };
 }
