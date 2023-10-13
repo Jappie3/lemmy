@@ -212,7 +212,7 @@
       fix = self.packages.x86_64-linux.lemmy-fix;
       fail = self.packages.x86_64-linux.lemmy-fail;
       ignore = self.packages.x86_64-linux.lemmy-ignore;
-      deploy = self.nixosConfigurations.lemmy-deploy;
+      # deploy = self.nixosConfigurations.lemmy-deploy;
     };
   };
 }
