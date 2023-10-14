@@ -5,7 +5,19 @@
   pkgs,
   modulesPath,
   ...
-}: {
+}: let
+  translations-submodule = pkgs.stdenv.mkDerivation {
+    name = "translations";
+    src = fetchTarball {
+      url = "https://github.com/LemmyNet/lemmy-translations/archive/1c42c579460871de7b4ea18e58dc25543b80d289.tar.gz";
+      sha256 = "sha256:14nj3aj6avn3y0nqxfdrbgd7w5nii5zqzm4klhsslkfq6nczd4fs";
+    };
+    installPhase = ''
+      mkdir $out
+      cp -r email translations README.md translators.json LICENSE $out
+    '';
+  };
+in {
   # Cachix token for deploying the agent
   age.secrets.cachix-agent.file = ./secrets/cachix-agent.age;
 
@@ -53,43 +65,90 @@
       # host = "jappie3.cachix.org";
       credentialsFile = "${config.age.secrets.cachix-agent.path}";
     };
-    # lemmy = {
-    #   enable = true;
-    #   settings = {
-    #     port = 8536;
-    #     # domain name of the instance
-    #     hostname = "lemmy.com";
-    #   };
-    #   database = {
-    #     # database connection URI
-    #     uri = "";
-    #   };
-    #   # server.package = "";
-    #   ui = {
-    #     # package = "";
-    #     port = 1234;
-    #   };
-    # };
-    openssh = {
+    lemmy = {
       enable = true;
-      startWhenNeeded = true;
-      ports = [22];
-      openFirewall = true;
-      banner = "\n\tThe great gates have been sealed.\n\t\tNone shall enter.\n\t\tNone shall leave.\n\n\n";
       settings = {
-        X11Forwarding = false;
-        UseDns = false;
-        PermitRootLogin = "yes";
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-        KexAlgorithms = [
-          "curve25519-sha256"
-          "curve25519-sha256@libssh.org"
-          "diffie-hellman-group16-sha512"
-          "diffie-hellman-group18-sha512"
-          "sntrup761x25519-sha512@openssh.com"
-        ];
+        port = 8536;
+        # domain name of the instance
+        hostname = "lemmy.zephyo.me";
       };
+      server.package = pkgs.rustPlatform.buildRustPackage {
+        name = "lemmy";
+        pname = "lemmy";
+        src = ./lemmy;
+        cargoLock = {
+          lockFile = ./lemmy/Cargo.lock;
+        };
+        doCheck = true;
+        copyLibs = true;
+
+        CARGO_BUILD_INCREMENTAL = "false";
+        RUST_BACKTRACE = "full";
+
+        nativeBuildInputs = with pkgs; [
+          # build deps
+          pkg-config
+          rustfmt
+          rustc
+          cargo
+          # SBOM
+          cargo-cyclonedx
+          # SCA (audit cargo.lock)
+          cargo-audit
+          # security scanner
+          trivy
+          # lints
+          clippy
+        ];
+        buildInputs = with pkgs; [
+          openssl.dev
+          postgresql.lib
+        ];
+
+        preConfigure = ''
+          # make sure the git submodule is in place
+          mkdir -p crates/utils/translations
+          cp -r ${translations-submodule}/* crates/utils/translations
+        '';
+
+        preBuild = ''
+          cargo cyclonedx
+          trivy --cache-dir .trivycache config --exit-code 0 .
+        '';
+        postBuild = ''
+          cargo clippy -- -A clippy::all
+        '';
+      };
+    };
+    database = {
+      # database connection URI
+      uri = "";
+    };
+    # server.package = "";
+    ui = {
+      # package =
+      port = 1234;
+    };
+  };
+  openssh = {
+    enable = true;
+    startWhenNeeded = true;
+    ports = [22];
+    openFirewall = true;
+    banner = "\n\tThe great gates have been sealed.\n\t\tNone shall enter.\n\t\tNone shall leave.\n\n\n";
+    settings = {
+      X11Forwarding = false;
+      UseDns = false;
+      PermitRootLogin = "yes";
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      KexAlgorithms = [
+        "curve25519-sha256"
+        "curve25519-sha256@libssh.org"
+        "diffie-hellman-group16-sha512"
+        "diffie-hellman-group18-sha512"
+        "sntrup761x25519-sha512@openssh.com"
+      ];
     };
   };
 

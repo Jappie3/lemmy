@@ -70,14 +70,6 @@
         };
       };
     };
-    # nixosConfigurations.lemmy-deploy = nixpkgs.lib.nixosSystem {
-    #   system = "x86_64-linux";
-    #   modules = [
-    #     ./configuration.nix
-    #     inputs.disko.nixosModules.disko
-    #     inputs.agenix.nixosModules.default
-    #   ];
-    # };
 
     # LEMMY PACKAGE
     packages.x86_64-linux.lemmy-fix = pkgs.rustPlatform.buildRustPackage {
@@ -181,60 +173,57 @@
         cargo clippy -- -D warnings
       '';
     };
-    packages.x86_64-linux.lemmy-ignore = pkgs.rustPlatform.buildRustPackage {
-      name = "lemmy";
-      pname = "lemmy";
-      src = ./lemmy;
-      cargoLock = {
-        lockFile = ./lemmy/Cargo.lock;
-      };
-      doCheck = true;
-      copyLibs = true;
 
-      CARGO_BUILD_INCREMENTAL = "false";
-      RUST_BACKTRACE = "full";
-
-      nativeBuildInputs = with pkgs; [
-        # build deps
-        pkg-config
-        rustfmt
-        rustc
-        cargo
-        # SBOM
-        cargo-cyclonedx
-        # SCA (audit cargo.lock)
-        cargo-audit
-        # security scanner
-        trivy
-        # lints
-        clippy
-      ];
-      buildInputs = with pkgs; [
-        openssl.dev
-        postgresql.lib
-      ];
-
-      preConfigure = ''
-        # make sure the git submodule is in place
-        mkdir -p crates/utils/translations
-        cp -r ${translations-submodule}/* crates/utils/translations
-      '';
-
-      preBuild = ''
-        cargo cyclonedx
-        trivy --cache-dir .trivycache config --exit-code 0 .
-      '';
-      postBuild = ''
-        cargo clippy -- -A clippy::all
-      '';
-    };
+    # packages.x86_64-linux.lemmy-ignore = pkgs.rustPlatform.buildRustPackage {
+    #   name = "lemmy";
+    #   pname = "lemmy";
+    #   src = ./lemmy;
+    #   cargoLock = {
+    #     lockFile = ./lemmy/Cargo.lock;
+    #   };
+    #   doCheck = true;
+    #   copyLibs = true;
+    #   CARGO_BUILD_INCREMENTAL = "false";
+    #   RUST_BACKTRACE = "full";
+    #   nativeBuildInputs = with pkgs; [
+    #     # build deps
+    #     pkg-config
+    #     rustfmt
+    #     rustc
+    #     cargo
+    #     # SBOM
+    #     cargo-cyclonedx
+    #     # SCA (audit cargo.lock)
+    #     cargo-audit
+    #     # security scanner
+    #     trivy
+    #     # lints
+    #     clippy
+    #   ];
+    #   buildInputs = with pkgs; [
+    #     openssl.dev
+    #     postgresql.lib
+    #   ];
+    #   preConfigure = ''
+    #     # make sure the git submodule is in place
+    #     mkdir -p crates/utils/translations
+    #     cp -r ${translations-submodule}/* crates/utils/translations
+    #   '';
+    #   preBuild = ''
+    #     cargo cyclonedx
+    #     trivy --cache-dir .trivycache config --exit-code 0 .
+    #   '';
+    #   postBuild = ''
+    #     cargo clippy -- -A clippy::all
+    #   '';
+    # };
 
     # HYDRA JOBS
     hydraJobs = {
       fix = self.packages.x86_64-linux.lemmy-fix;
       fail = self.packages.x86_64-linux.lemmy-fail;
-      ignore = self.packages.x86_64-linux.lemmy-ignore;
-      # deploy = self.nixosConfigurations.lemmy-deploy;
+      # ignore = self.packages.x86_64-linux.lemmy-ignore;
+      deploy = self.nixosConfigurations.lemmy-deploy;
     };
   };
 }
