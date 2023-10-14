@@ -121,13 +121,24 @@ in {
       };
       database = {
         # database connection URI
-        uri = "";
+        uri = "localhost:5432";
       };
-      # server.package = "";
       ui = {
         # package =
         port = 1234;
       };
+    };
+    postgresql = {
+      # https://pgtune.leopard.in.ua/
+      enable = true;
+      port = 5432;
+      # allow all local connections, type database user address method
+      # don't do this in production, use passwords (:
+      authentication = ''
+        local all all trust
+        host all all 127.0.0.1/32 trust
+        host all all ::1/128 trust
+      '';
     };
     openssh = {
       enable = true;
@@ -171,7 +182,9 @@ in {
     tree
     jq
     cachix
-    # lemmy-server
+    # lemmy-server -> comes from Cachix
+    lemmy-ui
+    postgresql
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
