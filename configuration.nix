@@ -138,6 +138,10 @@ in {
         host all all 127.0.0.1/32 trust
         host all all ::1/128 trust
       '';
+      initialScript = ''
+        CREATE USER lemmy WITH PASSWORD 'secure-db-passwd'
+        CREATE DATABASE lemmy WITH OWNER lemmy
+      '';
     };
     openssh = {
       enable = true;
