@@ -59,7 +59,7 @@
     # nix build
     # cachix push jappie3 ./result
     # cachix deploy activate --agent lemmy-deploy ./result
-    defaultPackage."${system}" = cachix-deploy-lib.spec {
+    packages."${system}".deploy = cachix-deploy-lib.spec {
       agents = {
         lemmy-deploy = cachix-deploy-lib.nixos {
           imports = [
@@ -72,7 +72,7 @@
     };
 
     # LEMMY PACKAGE
-    packages.x86_64-linux.lemmy-fix = pkgs.rustPlatform.buildRustPackage {
+    packages."${system}".lemmy-fix = pkgs.rustPlatform.buildRustPackage {
       name = "lemmy";
       pname = "lemmy";
       src = ./lemmy;
@@ -122,7 +122,7 @@
         cargo clippy --fix --allow-no-vcs
       '';
     };
-    packages.x86_64-linux.lemmy-fail = pkgs.rustPlatform.buildRustPackage {
+    packages."${system}".lemmy-fail = pkgs.rustPlatform.buildRustPackage {
       name = "lemmy";
       pname = "lemmy";
       src = ./lemmy;
@@ -220,10 +220,10 @@
 
     # HYDRA JOBS
     hydraJobs = {
-      fix = self.packages.x86_64-linux.lemmy-fix;
-      fail = self.packages.x86_64-linux.lemmy-fail;
+      fix = self.packages."${system}".lemmy-fix;
+      fail = self.packages."${system}".lemmy-fail;
       # ignore = self.packages.x86_64-linux.lemmy-ignore;
-      deploy = self.nixosConfigurations.lemmy-deploy;
+      deploy = self.packages."${system}".deploy;
     };
   };
 }
