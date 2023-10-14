@@ -119,15 +119,15 @@ in {
           cargo clippy -- -A clippy::all
         '';
       };
-    };
-    database = {
-      # database connection URI
-      uri = "";
-    };
-    # server.package = "";
-    ui = {
-      # package =
-      port = 1234;
+      database = {
+        # database connection URI
+        uri = "";
+      };
+      # server.package = "";
+      ui = {
+        # package =
+        port = 1234;
+      };
     };
     openssh = {
       enable = true;
