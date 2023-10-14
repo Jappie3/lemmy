@@ -55,123 +55,122 @@
       '';
     };
   in {
-    # HOST CONFIG
-    # nix build
-    # cachix push jappie3 ./result
-    # cachix deploy activate --agent lemmy-deploy ./result
-    packages."${system}".deploy = cachix-deploy-lib.spec {
-      agents = {
-        lemmy-deploy = cachix-deploy-lib.nixos {
-          imports = [
-            inputs.disko.nixosModules.disko
-            inputs.agenix.nixosModules.default
-            ./configuration.nix
-          ];
+    packages."${system}" = {
+      # DEPLOY HOST
+      deploy = cachix-deploy-lib.spec {
+        agents = {
+          lemmy-deploy = cachix-deploy-lib.nixos {
+            imports = [
+              inputs.disko.nixosModules.disko
+              inputs.agenix.nixosModules.default
+              ./configuration.nix
+            ];
+          };
         };
       };
-    };
 
-    # LEMMY PACKAGE
-    packages."${system}".lemmy-fix = pkgs.rustPlatform.buildRustPackage {
-      name = "lemmy";
-      pname = "lemmy";
-      src = ./lemmy;
-      cargoLock = {
-        lockFile = ./lemmy/Cargo.lock;
+      # LEMMY PACKAGE - fix & fail
+      lemmy-fix = pkgs.rustPlatform.buildRustPackage {
+        name = "lemmy";
+        pname = "lemmy";
+        src = ./lemmy;
+        cargoLock = {
+          lockFile = ./lemmy/Cargo.lock;
+        };
+        doCheck = true;
+        copyLibs = true;
+
+        CARGO_BUILD_INCREMENTAL = "false";
+        RUST_BACKTRACE = "full";
+
+        nativeBuildInputs = with pkgs; [
+          # build deps
+          pkg-config
+          rustfmt
+          rustc
+          cargo
+          # SBOM
+          cargo-cyclonedx
+          # SCA (audit cargo.lock)
+          cargo-audit
+          # security scanner
+          trivy
+          # lints
+          clippy
+        ];
+        buildInputs = with pkgs; [
+          openssl.dev
+          postgresql.lib
+        ];
+
+        preConfigure = ''
+          # make sure the git submodule is in place
+          mkdir -p crates/utils/translations
+          cp -r ${translations-submodule}/* crates/utils/translations
+        '';
+
+        preBuild = ''
+          cargo cyclonedx
+          # needs internet V
+          #cargo audit -n -d ${advisory-db} fix
+          trivy --cache-dir .trivycache config .
+        '';
+
+        postBuild = ''
+          cargo clippy --fix --allow-no-vcs
+        '';
       };
-      doCheck = true;
-      copyLibs = true;
+      lemmy-fail = pkgs.rustPlatform.buildRustPackage {
+        name = "lemmy";
+        pname = "lemmy";
+        src = ./lemmy;
+        cargoLock = {
+          lockFile = ./lemmy/Cargo.lock;
+        };
+        doCheck = true;
+        copyLibs = true;
 
-      CARGO_BUILD_INCREMENTAL = "false";
-      RUST_BACKTRACE = "full";
+        CARGO_BUILD_INCREMENTAL = "false";
+        RUST_BACKTRACE = "full";
 
-      nativeBuildInputs = with pkgs; [
-        # build deps
-        pkg-config
-        rustfmt
-        rustc
-        cargo
-        # SBOM
-        cargo-cyclonedx
-        # SCA (audit cargo.lock)
-        cargo-audit
-        # security scanner
-        trivy
-        # lints
-        clippy
-      ];
-      buildInputs = with pkgs; [
-        openssl.dev
-        postgresql.lib
-      ];
+        nativeBuildInputs = with pkgs; [
+          # build deps
+          pkg-config
+          rustfmt
+          rustc
+          cargo
+          # SBOM
+          cargo-cyclonedx
+          # SCA (audit cargo.lock)
+          cargo-audit
+          # security scanner
+          trivy
+          # lints
+          clippy
+        ];
+        buildInputs = with pkgs; [
+          openssl.dev
+          postgresql.lib
+        ];
 
-      preConfigure = ''
-        # make sure the git submodule is in place
-        mkdir -p crates/utils/translations
-        cp -r ${translations-submodule}/* crates/utils/translations
-      '';
+        preConfigure = ''
+          # make sure the git submodule is in place
+          mkdir -p crates/utils/translations
+          cp -r ${translations-submodule}/* crates/utils/translations
+        '';
 
-      preBuild = ''
-        cargo cyclonedx
-        # needs internet V
-        #cargo audit -n -d ${advisory-db} fix
-        trivy --cache-dir .trivycache config .
-      '';
+        preBuild = ''
+          cargo cyclonedx
+          # fail on warnings:
+          cargo audit -n -d ${advisory-db} --deny warnings
+          trivy --cache-dir .trivycache config --exit-code 1 .
+        '';
 
-      postBuild = ''
-        cargo clippy --fix --allow-no-vcs
-      '';
-    };
-    packages."${system}".lemmy-fail = pkgs.rustPlatform.buildRustPackage {
-      name = "lemmy";
-      pname = "lemmy";
-      src = ./lemmy;
-      cargoLock = {
-        lockFile = ./lemmy/Cargo.lock;
+        postBuild = ''
+          # fail on warnings
+          cargo clippy -- -D warnings
+        '';
       };
-      doCheck = true;
-      copyLibs = true;
-
-      CARGO_BUILD_INCREMENTAL = "false";
-      RUST_BACKTRACE = "full";
-
-      nativeBuildInputs = with pkgs; [
-        # build deps
-        pkg-config
-        rustfmt
-        rustc
-        cargo
-        # SBOM
-        cargo-cyclonedx
-        # SCA (audit cargo.lock)
-        cargo-audit
-        # security scanner
-        trivy
-        # lints
-        clippy
-      ];
-      buildInputs = with pkgs; [
-        openssl.dev
-        postgresql.lib
-      ];
-
-      preConfigure = ''
-        # make sure the git submodule is in place
-        mkdir -p crates/utils/translations
-        cp -r ${translations-submodule}/* crates/utils/translations
-      '';
-
-      preBuild = ''
-        cargo cyclonedx
-        # fail on warnings:
-        cargo audit -n -d ${advisory-db} --deny warnings
-        trivy --cache-dir .trivycache config --exit-code 1 .
-      '';
-
-      postBuild = ''
-        # fail on warnings
-        cargo clippy -- -D warnings
-      '';
     };
 
     # packages.x86_64-linux.lemmy-ignore = pkgs.rustPlatform.buildRustPackage {
