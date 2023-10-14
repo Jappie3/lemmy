@@ -119,30 +119,31 @@ in {
           cargo clippy -- -A clippy::all
         '';
       };
-      # database = {
-      #   uri = "";
-      # };
+      database = {
+        # uri = "";
+        createLocally = true;
+      };
       ui = {
         # package =
         port = 1234;
       };
     };
-    postgresql = {
-      # https://pgtune.leopard.in.ua/
-      enable = true;
-      port = 5432;
-      # allow all local connections, type database user address method
-      # don't do this in production, use passwords (:
-      authentication = ''
-        local all all trust
-        host all all 127.0.0.1/32 trust
-        host all all ::1/128 trust
-      '';
-      initialScript = pkgs.writeText "pg_init.txt" ''
-        CREATE USER lemmy WITH PASSWORD 'secure-db-passwd'
-        CREATE DATABASE lemmy WITH OWNER lemmy
-      '';
-    };
+    # postgresql = {
+    #   # https://pgtune.leopard.in.ua/
+    #   enable = true;
+    #   port = 5432;
+    #   # allow all local connections, type database user address method
+    #   # don't do this in production, use passwords (:
+    #   authentication = ''
+    #     local all all trust
+    #     host all all 127.0.0.1/32 trust
+    #     host all all ::1/128 trust
+    #   '';
+    #   initialScript = pkgs.writeText "pg_init.txt" ''
+    #     CREATE USER lemmy WITH PASSWORD 'secure-db-passwd'
+    #     CREATE DATABASE lemmy WITH OWNER lemmy
+    #   '';
+    # };
     openssh = {
       enable = true;
       startWhenNeeded = true;
