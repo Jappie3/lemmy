@@ -5,6 +5,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    cachix.url = "github:cachix/cachix";
     cachix-deploy-flake.url = "github:cachix/cachix-deploy-flake";
     agenix = {
       url = "github:ryantm/agenix";
@@ -27,11 +28,21 @@
   outputs = {
     self,
     nixpkgs,
+    cachix,
+    cachix-deploy-flake,
     advisory-db,
     ...
   }: let
     inherit (self) inputs;
-    pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    system = "x86_64-linux";
+    # pkgs = import <nixpkgs> {inherit (self) system;};
+    pkgs = import "${nixpkgs}" {
+      inherit system;
+      config.allowUnfree = true;
+    };
+    cachix-deploy-lib = cachix-deploy-flake.lib pkgs;
+    # pkgs = nixpkgs.legacyPackages.x86_64-linux;
+
     translations-submodule = pkgs.stdenv.mkDerivation {
       name = "translations";
       src = fetchTarball {
@@ -45,14 +56,28 @@
     };
   in {
     # HOST CONFIG
-    nixosConfigurations.lemmy-deploy = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./configuration.nix
-        inputs.disko.nixosModules.disko
-        inputs.agenix.nixosModules.default
-      ];
+    # nix build
+    # cachix push jappie3 ./result
+    # cachix deploy activate --agent lemmy-deploy ./result
+    defaultPackage."${system}" = cachix-deploy-lib.spec {
+      agents = {
+        lemmy-deploy = cachix-deploy-lib.nixos {
+          imports = [
+            inputs.disko.nixosModules.disko
+            inputs.agenix.nixosModules.default
+            ./configuration.nix
+          ];
+        };
+      };
     };
+    # nixosConfigurations.lemmy-deploy = nixpkgs.lib.nixosSystem {
+    #   system = "x86_64-linux";
+    #   modules = [
+    #     ./configuration.nix
+    #     inputs.disko.nixosModules.disko
+    #     inputs.agenix.nixosModules.default
+    #   ];
+    # };
 
     # LEMMY PACKAGE
     packages.x86_64-linux.lemmy-fix = pkgs.rustPlatform.buildRustPackage {
@@ -209,10 +234,10 @@
 
     # HYDRA JOBS
     hydraJobs = {
-      # fix = self.packages.x86_64-linux.lemmy-fix;
-      # fail = self.packages.x86_64-linux.lemmy-fail;
-      # ignore = self.packages.x86_64-linux.lemmy-ignore;
-      deploy = self.nixosConfigurations.lemmy-deploy;
+      fix = self.packages.x86_64-linux.lemmy-fix;
+      fail = self.packages.x86_64-linux.lemmy-fail;
+      ignore = self.packages.x86_64-linux.lemmy-ignore;
+      # deploy = self.nixosConfigurations.lemmy-deploy;
     };
   };
 }
