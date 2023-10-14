@@ -129,26 +129,26 @@ in {
       # package =
       port = 1234;
     };
-  };
-  openssh = {
-    enable = true;
-    startWhenNeeded = true;
-    ports = [22];
-    openFirewall = true;
-    banner = "\n\tThe great gates have been sealed.\n\t\tNone shall enter.\n\t\tNone shall leave.\n\n\n";
-    settings = {
-      X11Forwarding = false;
-      UseDns = false;
-      PermitRootLogin = "yes";
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-      KexAlgorithms = [
-        "curve25519-sha256"
-        "curve25519-sha256@libssh.org"
-        "diffie-hellman-group16-sha512"
-        "diffie-hellman-group18-sha512"
-        "sntrup761x25519-sha512@openssh.com"
-      ];
+    openssh = {
+      enable = true;
+      startWhenNeeded = true;
+      ports = [22];
+      openFirewall = true;
+      banner = "\n\tThe great gates have been sealed.\n\t\tNone shall enter.\n\t\tNone shall leave.\n\n\n";
+      settings = {
+        X11Forwarding = false;
+        UseDns = false;
+        PermitRootLogin = "yes";
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+        KexAlgorithms = [
+          "curve25519-sha256"
+          "curve25519-sha256@libssh.org"
+          "diffie-hellman-group16-sha512"
+          "diffie-hellman-group18-sha512"
+          "sntrup761x25519-sha512@openssh.com"
+        ];
+      };
     };
   };
 
