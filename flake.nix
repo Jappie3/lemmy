@@ -208,9 +208,6 @@
         trivy
         # lints
         clippy
-        # for runcommand
-        jq
-        cachix
       ];
       buildInputs = with pkgs; [
         openssl.dev
