@@ -119,10 +119,9 @@ in {
           cargo clippy -- -A clippy::all
         '';
       };
-      database = {
-        # database connection URI
-        uri = "localhost:5432";
-      };
+      # database = {
+      #   uri = "";
+      # };
       ui = {
         # package =
         port = 1234;
