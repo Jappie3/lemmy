@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   modulesPath,
@@ -62,7 +61,6 @@ in {
     cachix-agent = {
       enable = true;
       name = "lemmy-deploy";
-      # host = "jappie3.cachix.org";
       credentialsFile = "${config.age.secrets.cachix-agent.path}";
     };
     lemmy = {
@@ -70,7 +68,7 @@ in {
       settings = {
         port = 8536;
         # domain name of the instance
-        hostname = "lemmy.zephyo.me";
+        hostname = "my.lemmy.instance.com";
       };
       server.package = pkgs.rustPlatform.buildRustPackage {
         name = "lemmy";
@@ -119,41 +117,19 @@ in {
           cargo clippy -- -A clippy::all
         '';
       };
-      database = {
-        # uri = "";
-        createLocally = true;
-      };
-      ui = {
-        # package =
-        port = 1234;
-      };
+      database.createLocally = true;
+      ui.port = 1234;
     };
-    # postgresql = {
-    #   # https://pgtune.leopard.in.ua/
-    #   enable = true;
-    #   port = 5432;
-    #   # allow all local connections, type database user address method
-    #   # don't do this in production, use passwords (:
-    #   authentication = ''
-    #     local all all trust
-    #     host all all 127.0.0.1/32 trust
-    #     host all all ::1/128 trust
-    #   '';
-    #   initialScript = pkgs.writeText "pg_init.txt" ''
-    #     CREATE USER lemmy WITH PASSWORD 'secure-db-passwd'
-    #     CREATE DATABASE lemmy WITH OWNER lemmy
-    #   '';
-    # };
     openssh = {
       enable = true;
       startWhenNeeded = true;
       ports = [22];
       openFirewall = true;
-      banner = "\n\tThe great gates have been sealed.\n\t\tNone shall enter.\n\t\tNone shall leave.\n\n\n";
+      banner = "\n\tUnauthorized access is prohibited.\n\n\n";
       settings = {
         X11Forwarding = false;
         UseDns = false;
-        PermitRootLogin = "yes";
+        PermitRootLogin = "no";
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
         KexAlgorithms = [
@@ -178,15 +154,18 @@ in {
     };
   };
 
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA1mAN5Db7eZ0iuBGGxdPqQCR2l6jDZBjgX4ZVOcip27 jasper@Kainas"
-  ];
+  users.users.jasper = {
+    isNormalUser = true;
+    extraGroups = ["wheel"];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA1mAN5Db7eZ0iuBGGxdPqQCR2l6jDZBjgX4ZVOcip27 jasper@Kainas"
+    ];
+  };
 
   environment.systemPackages = with pkgs; [
     tree
     jq
     cachix
-    # lemmy-server -> comes from Cachix
     lemmy-ui
     postgresql
   ];
