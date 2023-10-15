@@ -1,5 +1,5 @@
 {
-  description = "Host on which Lemmy will be deployed from Cachix";
+  description = "Lemmy flake for building on Hydra & deploying via Cachix";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";

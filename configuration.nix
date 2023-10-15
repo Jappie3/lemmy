@@ -129,7 +129,7 @@ in {
       settings = {
         X11Forwarding = false;
         UseDns = false;
-        PermitRootLogin = "no";
+        PermitRootLogin = "yes";
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
         KexAlgorithms = [
@@ -154,12 +154,17 @@ in {
     };
   };
 
-  users.users.jasper = {
-    isNormalUser = true;
-    extraGroups = ["wheel"];
-    openssh.authorizedKeys.keys = [
+  users.users = {
+    root.openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA1mAN5Db7eZ0iuBGGxdPqQCR2l6jDZBjgX4ZVOcip27 jasper@Kainas"
     ];
+    jasper = {
+      isNormalUser = true;
+      extraGroups = ["wheel"];
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA1mAN5Db7eZ0iuBGGxdPqQCR2l6jDZBjgX4ZVOcip27 jasper@Kainas"
+      ];
+    };
   };
 
   environment.systemPackages = with pkgs; [
